@@ -7,7 +7,7 @@ import "./Checkout.css";
 const Checkout = () => {
   const navigate = useNavigate();
   const { cart, removeFromCart, updateQuantity, getTotalPrice, clearCart } = useCart();
-  const [searchQuery, setSearchQuery] = useState("");
+const [_searchQuery, setSearchQuery] = useState("");
   const [orderPlaced, setOrderPlaced] = useState(false);
 
   const handlePlaceOrder = () => {
