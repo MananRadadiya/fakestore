@@ -8,30 +8,29 @@ import "./ProductDetails.css";
 const ProductDetails = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
-const [_searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    api.get(`/products/${id}`)
-      .then(res => setProduct(res.data));
+    api.get(`/products/${id}`).then((res) => setProduct(res.data));
   }, [id]);
 
   const handleAddToCart = () => {
-    if (product) {
-      addToCart(product, quantity);
-      setAdded(true);
-      setTimeout(() => setAdded(false), 2000);
-    }
+    if (!product) return;
+
+    addToCart(product, quantity);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
   };
 
   if (!product) {
     return (
       <>
-        <Navbar onSearch={setSearchQuery} />
+        <Navbar onSearch={() => {}} />
         <div className="details-container">
-          <div className="skeleton-details"></div>
+          <div className="skeleton-details" />
         </div>
       </>
     );
@@ -39,11 +38,16 @@ const [_searchQuery, setSearchQuery] = useState("");
 
   return (
     <>
-      <Navbar onSearch={setSearchQuery} />
+      <Navbar onSearch={() => {}} />
+
       <div className="details-container">
         <div className="details">
           <div className="product-image-section">
-            <img src={product.image} alt={product.title} className="detail-image" />
+            <img
+              src={product.image}
+              alt={product.title}
+              className="detail-image"
+            />
           </div>
 
           <div className="product-info-section">
@@ -59,7 +63,9 @@ const [_searchQuery, setSearchQuery] = useState("");
             </div>
 
             <div className="price-section">
-              <span className="detail-price">${product.price.toFixed(2)}</span>
+              <span className="detail-price">
+                ${product.price.toFixed(2)}
+              </span>
               <span className="stock-status">✓ In Stock</span>
             </div>
 
@@ -69,16 +75,28 @@ const [_searchQuery, setSearchQuery] = useState("");
               <div className="quantity-selector">
                 <label>Quantity:</label>
                 <div className="quantity-controls">
-                  <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="qty-btn">
+                  <button
+                    className="qty-btn"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  >
                     −
                   </button>
+
                   <input
                     type="number"
-                    value={quantity}
-                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                     className="qty-input"
+                    value={quantity}
+                    onChange={(e) =>
+                      setQuantity(
+                        Math.max(1, parseInt(e.target.value) || 1)
+                      )
+                    }
                   />
-                  <button onClick={() => setQuantity(quantity + 1)} className="qty-btn">
+
+                  <button
+                    className="qty-btn"
+                    onClick={() => setQuantity(quantity + 1)}
+                  >
                     +
                   </button>
                 </div>
