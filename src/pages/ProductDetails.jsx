@@ -28,7 +28,7 @@ const ProductDetails = () => {
   if (!product) {
     return (
       <>
-        <Navbar onSearch={() => {}} />
+        <Navbar onSearch={() => { }} />
         <div className="details-container">
           <div className="skeleton-details" />
         </div>
@@ -38,16 +38,17 @@ const ProductDetails = () => {
 
   return (
     <>
-      <Navbar onSearch={() => {}} />
+      <Navbar onSearch={() => { }} />
 
       <div className="details-container">
         <div className="details">
           <div className="product-image-section">
             <img
-              src={product.image}
+              src={product.thumbnail}
               alt={product.title}
               className="detail-image"
             />
+
           </div>
 
           <div className="product-info-section">

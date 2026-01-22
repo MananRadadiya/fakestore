@@ -13,46 +13,67 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    api.get("/products")
-      .then(res => setProducts(res.data))
-      .catch(err => console.error(err))
+    api
+      .get("/products")
+      .then((res) => {
+        setProducts(res.data.products);
+      })
+      .catch((err) =>
+        console.error("Failed to fetch products:", err)
+      )
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
-    api.get("/products/categories")
-      .then(res => setCategories(res.data))
-      .catch(err => console.error("Failed to fetch categories:", err));
+    api
+      .get("/products/categories")
+      .then((res) => setCategories(res.data))
+      .catch((err) =>
+        console.error("Failed to fetch categories:", err)
+      );
   }, []);
 
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
-    const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      selectedCategory === "all" ||
+      product.category === selectedCategory;
+
+    const matchesSearch = product.title
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+
     return matchesCategory && matchesSearch;
   });
 
   return (
     <>
       <Navbar onSearch={setSearchQuery} />
-      
+
       <div className="home-container">
         <h1 className="home-title">Our Products</h1>
 
         {/* Category Filter */}
         <div className="category-section">
           <button
-            className={`category-btn ${selectedCategory === "all" ? "active" : ""}`}
+            className={`category-btn ${selectedCategory === "all" ? "active" : ""
+              }`}
             onClick={() => setSelectedCategory("all")}
           >
             All Products
           </button>
-          {categories.map(category => (
+
+          {categories.map((category) => (
             <button
-              key={category}
-              className={`category-btn ${selectedCategory === category ? "active" : ""}`}
-              onClick={() => setSelectedCategory(category)}
+              key={category.slug}
+              className={`category-btn ${selectedCategory === category.slug
+                ? "active"
+                : ""
+                }`}
+              onClick={() =>
+                setSelectedCategory(category.slug)
+              }
             >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
+              {category.name}
             </button>
           ))}
         </div>
@@ -62,8 +83,11 @@ const Home = () => {
           <SkeletonGrid count={8} />
         ) : filteredProducts.length > 0 ? (
           <div className="product-grid">
-            {filteredProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
+            {filteredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+              />
             ))}
           </div>
         ) : (
